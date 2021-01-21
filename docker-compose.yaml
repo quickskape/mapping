@@ -1,0 +1,19 @@
+version: "3"
+services:
+    osrm-backend:
+        container_name: osrm-backend
+        image: osrm/osrm-backend
+        restart: always
+        ports:
+            - "9000:5000"
+        volumes:
+            - ${PWD}/routing-files:/data
+        command: "osrm-routed --algorithm mld /data/england-latest.osrm"
+    osrm-frontend:
+        container_name: osrm-frontend
+        image: osrm/osrm-frontend
+        restart: always
+        environment:
+          - OSRM_BACKEND=http://localhost:9000
+        ports:
+            - "9001:9966"
